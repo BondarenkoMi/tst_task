@@ -1,0 +1,37 @@
+{% include 'base.html' %}
+{% block content %}
+    <form method='GET'>
+        <input placeholder='Номер стола или статус заказа' name='search'>
+        <button type='submit'>Поиск</button>
+    </form>
+    <a href={% url "orders:create" %}>Новый заказ</a>
+    <hr>
+    {% for order in object_list %}
+    <div>
+        <p>Номер стола: {{ order.table_number }}</p>
+        <p>Общая стоимость: {{ order.total_price }}р.</p>
+        {% for dish in order.items.all %}
+            <p>{{ dish.name}} - {{ dish.price }}р.</p>
+        {% endfor %}
+        <form id="status-form" method="POST" action="{% url 'orders:update_status' order.id %}">
+            {% csrf_token %}
+            <select id="status" name="status">
+                {% for choice in choices %}
+                    <option value="{{ choice.0 }}" {% if choice.0 == order.status %}selected{% endif %}>
+                        {{ choice.1 }}
+                    </option>
+                {% endfor %}
+            </select>
+        </form>
+        
+        <script>
+            document.getElementById('status').addEventListener('change', function () {
+                document.getElementById('status-form').submit();
+            });
+        </script>
+        
+        <a href={% url "orders:delete" order.id %}>Удалить заказ</a>
+    </div>
+    <hr>
+    {% endfor %}
+{% endblock %}
