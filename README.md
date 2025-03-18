@@ -24,3 +24,4 @@ pytest
 ```
 python3 manage.py runserver
 ```
+![изображение](https://github.com/user-attachments/assets/6ad91b52-9d78-48f5-a22d-30e5a7aafa95)
